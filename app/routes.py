@@ -17,7 +17,10 @@ def receber_localizacao():
 
 @bp.route("/localizacao", methods=["GET"])
 def enviar_localizacao():
+    if localizacao["latitude"] is None or localizacao["longitude"] is None:
+        return jsonify({"status": "erro", "mensagem": "Nenhuma localização registrada"}), 404
     return jsonify(localizacao)
+
 
 @bp.route("/comando", methods=["GET", "POST"])
 def gerenciar_comando():
