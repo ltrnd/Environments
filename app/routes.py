@@ -21,11 +21,14 @@ def enviar_localizacao():
 
 @bp.route("/comando", methods=["GET", "POST"])
 def gerenciar_comando():
+    global comando
     if request.method == "POST":
         data = request.get_json()
         comando["comando"] = data.get("comando")
         return jsonify({"status": "ok", "mensagem": "Comando atualizado"})
-    return jsonify(comando)
+    comando_atual = comando["comando"]
+    comando["comando"] = None  # limpa após pegar
+    return jsonify({"comando": comando_atual})
 
 @bp.route("/upload", methods=["POST"])
 def upload_arquivo():
