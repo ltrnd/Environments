@@ -52,7 +52,7 @@ def upload_arquivo():
         "url": f"/uploads/{nome_arquivo}"
     })
 
-# ✅ NOVA ROTA: Servir arquivos da pasta uploads
+# ✅ ROTA CORRIGIDA: Servir arquivos da pasta uploads
 @bp.route("/uploads/<path:nome_arquivo>")
-def servir_arquivo(DCIM/Tasker/foto.jpg):
-    return send_from_directory("uploads", DCIM/Tasker/foto.jpg)
+def servir_arquivo(nome_arquivo):
+    return send_from_directory("uploads", nome_arquivo)
