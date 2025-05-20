@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_from_directory
 import os
 from datetime import datetime
 
@@ -20,7 +20,6 @@ def enviar_localizacao():
     if localizacao["latitude"] is None or localizacao["longitude"] is None:
         return jsonify({"status": "erro", "mensagem": "Nenhuma localização registrada"}), 404
     return jsonify(localizacao)
-
 
 @bp.route("/comando", methods=["GET", "POST"])
 def gerenciar_comando():
@@ -44,6 +43,16 @@ def upload_arquivo():
     pasta = "uploads"
     os.makedirs(pasta, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    caminho = os.path.join(pasta, f"{timestamp}_{file.filename}")
+    nome_arquivo = f"{timestamp}_{file.filename}"
+    caminho = os.path.join(pasta, nome_arquivo)
     file.save(caminho)
-    return jsonify({"status": "ok", "mensagem": f"Arquivo salvo como {caminho}"})
+    return jsonify({
+        "status": "ok",
+        "mensagem": f"Arquivo salvo como {caminho}",
+        "url": f"/uploads/{nome_arquivo}"
+    })
+
+# ✅ NOVA ROTA: Servir arquivos da pasta uploads
+@bp.route("/uploads/<path:nome_arquivo>")
+def servir_arquivo(nome_arquivo):
+    return send_from_directory("uploads", nome_arquivo)
