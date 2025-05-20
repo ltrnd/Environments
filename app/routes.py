@@ -54,5 +54,5 @@ def upload_arquivo():
 
 # ✅ NOVA ROTA: Servir arquivos da pasta uploads
 @bp.route("/uploads/<path:nome_arquivo>")
-def servir_arquivo(nome_arquivo):
-    return send_from_directory("uploads", nome_arquivo)
+def servir_arquivo(%File):
+    return send_from_directory("uploads", %File)
