@@ -52,7 +52,17 @@ def upload_arquivo():
         "url": f"/uploads/{nome_arquivo}"
     })
 
-# ✅ ROTA CORRIGIDA: Servir arquivos da pasta uploads
+# ✅ ROTA: Servir arquivos da pasta uploads
 @bp.route("/uploads/<path:nome_arquivo>")
 def servir_arquivo(nome_arquivo):
     return send_from_directory("uploads", nome_arquivo)
+
+# ✅ NOVA ROTA: Listar arquivos disponíveis na pasta uploads
+@bp.route("/uploads", methods=["GET"])
+def listar_arquivos():
+    pasta = "uploads"
+    if not os.path.exists(pasta):
+        return jsonify({"arquivos": []})
+    arquivos = os.listdir(pasta)
+    arquivos.sort(reverse=True)  # Mais recentes primeiro
+    return jsonify({"arquivos": arquivos})
